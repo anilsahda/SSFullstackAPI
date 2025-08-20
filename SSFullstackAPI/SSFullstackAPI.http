@@ -1,0 +1,6 @@
+@SSFullstackAPI_HostAddress = http://localhost:5177
+
+GET {{SSFullstackAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
