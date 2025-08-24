@@ -58,7 +58,7 @@ namespace SSFullstackAPI.Controllers
 
             var newCountry = new Countries
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = country.Id,
                 Name = country.Name,
                 Image = fileName
             };
@@ -96,7 +96,7 @@ namespace SSFullstackAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCountryById(string id)
+        public async Task<IActionResult> DeleteCountryById(int id)
         {
             var country = await _dbContext.LoadAsync<Countries>(id);
 

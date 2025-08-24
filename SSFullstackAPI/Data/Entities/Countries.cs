@@ -6,7 +6,7 @@ namespace SSFullstackAPI.Data.Entities
     public class Countries
     {
         [DynamoDBHashKey]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [DynamoDBProperty]
         public string Name { get; set; }

@@ -59,10 +59,8 @@ namespace SSFullstackAPI.Controllers
             return Ok("Data updated successfully!");
         }
 
-
-
         [HttpDelete("{id}")]
-        public IActionResult DeleteLanguageById(int id)
+        public IActionResult DeleteCountryById(int id)
         {
             var country = _context.Countries.Find(id);
             System.IO.File.Delete(Path.Combine(_env.WebRootPath, "api/Uploads", country.Image));
