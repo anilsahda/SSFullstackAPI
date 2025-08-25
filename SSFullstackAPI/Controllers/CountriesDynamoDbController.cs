@@ -38,33 +38,33 @@ namespace SSFullstackAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCountry([FromForm] CountryDTO country)
+        public async Task<IActionResult> AddCountry([FromForm] CountryDTO countrydto)
         {
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(country.Image.FileName)}";
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(countrydto.Image.FileName)}";
             using (var newMemoryStream = new MemoryStream())
             {
-                await country.Image.CopyToAsync(newMemoryStream);
+                await countrydto.Image.CopyToAsync(newMemoryStream);
                 var uploadRequest = new TransferUtilityUploadRequest
                 {
                     InputStream = newMemoryStream,
                     Key = fileName,
                     BucketName = _bucketName,
-                    ContentType = country.Image.ContentType
+                    ContentType = countrydto.Image.ContentType
                 };
 
                 var transferUtility = new TransferUtility(_s3Client);
                 await transferUtility.UploadAsync(uploadRequest);
             }
 
-            var newCountry = new Countries
+            var country = new Countries
             {
-                Id = country.Id,
-                Name = country.Name,
+                Id = countrydto.Id,
+                Name = countrydto.Name,
                 Image = fileName
             };
 
-            await _dbContext.SaveAsync(newCountry);
-            return Ok(newCountry);
+            await _dbContext.SaveAsync(country);
+            return Ok(country);
         }
 
         [HttpPut]
