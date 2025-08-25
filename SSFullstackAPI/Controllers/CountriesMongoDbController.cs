@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using SSFullstackAPI.Data.Entities;
-using SSFullstackAPI.Utilities;
 
 namespace SSFullstackAPI.Controllers
 {
@@ -21,7 +20,8 @@ namespace SSFullstackAPI.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] Country country)
         {
-            country.Id = MongoHelper.GetNextSequence(_db, "countryId");
+            var lastId = _countries.Find(_ => true).SortByDescending(c => c.Id).Project(c => c.Id).FirstOrDefault();
+            country.Id = lastId + 1;
             _countries.InsertOne(country);
             return Ok(country);
         }

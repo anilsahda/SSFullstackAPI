@@ -6,7 +6,6 @@ using MongoDB.Driver;
 using SSFullstackAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-var awsOptions = builder.Configuration.GetSection("AWS");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -27,20 +26,20 @@ builder.Services.AddSingleton(sp =>
     return client.GetDatabase(builder.Configuration.GetValue<string>("MongoDatabase"));
 });
 
+
 // Register DynamoDB client
+
+var awsConfig = builder.Configuration.GetSection("AWS");
+
 builder.Services.AddSingleton<IAmazonDynamoDB>(sp =>
 {
-    return new AmazonDynamoDBClient(
-        awsOptions["AccessKey"],
-        awsOptions["SecretKey"],
-        RegionEndpoint.GetBySystemName(awsOptions["Region"])
-    );
+  return new AmazonDynamoDBClient(awsConfig["AccessKey"], awsConfig["SecretKey"],RegionEndpoint.GetBySystemName(awsConfig["Region"]));
 });
 
 // Register S3 client
 builder.Services.AddSingleton<IAmazonS3>(sp =>
 {
-    return new AmazonS3Client(awsOptions["AccessKey"], awsOptions["SecretKey"], RegionEndpoint.GetBySystemName(awsOptions["Region"]));
+    return new AmazonS3Client(awsConfig["AccessKey"], awsConfig["SecretKey"], RegionEndpoint.GetBySystemName(awsConfig["Region"]));
 });
 
 builder.Services.AddCors(options =>
